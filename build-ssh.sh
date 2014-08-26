@@ -25,7 +25,7 @@
 VERSION="1.0.1i"
 #VERSION="1.0.2-beta1"
 USERSDKVERSION="7.1"
-MINIOSVERSION="6.0"
+MINIOSVERSION="5.0"
 VERIFYGPG=false
 
 ###########################################################################
@@ -36,7 +36,7 @@ VERIFYGPG=false
 
 # No need to change this since xcode build will only compile in the
 # necessary bits from the libraries we create
-ARCHS="i386 armv7 armv7s " # arm64 x86_64
+ARCHS="i386 armv7 armv7s arm64 x86_64"
 
 DEVELOPER=`xcode-select -print-path`
 #DEVELOPER="/Applications/Xcode.app/Contents/Developer"
