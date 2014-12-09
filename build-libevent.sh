@@ -22,8 +22,8 @@
 ###########################################################################
 # Choose your libevent version and your currently-installed iOS SDK version:
 #
-VERSION="2.0.21-stable"
-USERSDKVERSION="7.1"
+VERSION="2.1.4-alpha"
+USERSDKVERSION="8.1"
 MINIOSVERSION="6.0"
 VERIFYGPG=false
 
@@ -35,7 +35,7 @@ VERIFYGPG=false
 
 # No need to change this since xcode build will only compile in the
 # necessary bits from the libraries we create
-ARCHS="i386 armv7 armv7s " # arm64 x86_64
+ARCHS="i386 armv7 armv7s arm64 x86_64" # arm64 x86_64
 
 DEVELOPER=`xcode-select -print-path`
 #DEVELOPER="/Applications/Xcode.app/Contents/Developer"
