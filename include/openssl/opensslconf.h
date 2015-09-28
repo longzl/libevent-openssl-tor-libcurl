@@ -95,8 +95,8 @@ extern "C" {
 
 #if !(defined(VMS) || defined(__VMS)) /* VMS uses logical names instead */
 #if defined(HEADER_CRYPTLIB_H) && !defined(OPENSSLDIR)
-#define ENGINESDIR "/Users/sam/Desktop/build-ios/build/built/iPhoneSimulator8.1-i386.sdk/lib/engines"
-#define OPENSSLDIR "/Users/sam/Desktop/build-ios/build/built/iPhoneSimulator8.1-i386.sdk"
+#define ENGINESDIR "/Users/sam/Desktop/build-ios/build/built/iPhoneSimulator9.0-i386.sdk/lib/engines"
+#define OPENSSLDIR "/Users/sam/Desktop/build-ios/build/built/iPhoneSimulator9.0-i386.sdk"
 #endif
 #endif
 
@@ -191,7 +191,7 @@ extern "C" {
 #endif
 
 #if defined(DES_RISC1) && defined(DES_RISC2)
-YOU SHOULD NOT HAVE BOTH DES_RISC1 AND DES_RISC2 DEFINED!!!!!
+#error YOU SHOULD NOT HAVE BOTH DES_RISC1 AND DES_RISC2 DEFINED!!!!!
 #endif
 
 /* Unroll the inner loop, this sometimes helps, sometimes hinders.
