@@ -41,6 +41,35 @@ ARCHS="arm64 arm64e x86_64"
 DEVELOPER=`xcode-select -print-path`
 #DEVELOPER="/Applications/Xcode.app/Contents/Developer"
 
+# 查找 clang 编译器 目录
+# /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+CLANG=$(xcrun --find clang)
+
+# 查找 iPhone SDK 目录
+# /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.1.sdk
+IPHONE_OS_SDK_PATH=$(xcrun -sdk iphoneos --show-sdk-path)
+
+# IPHONE_OS_SDK_PATH 目录中 SDKs 的上级目录
+# /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer
+IPHONE_OS_CROSS_TOP=${IPHONE_OS_SDK_PATH//\/SDKs*/}
+
+# IPHONE_OS_SDK_PATH 目录中最后一级目录
+# iPhoneOS10.1.sdk
+IPHONE_OS_CROSS_SDK=${IPHONE_OS_SDK_PATH##*/}
+
+# iPhone 模拟器 sdk 目录
+# /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator10.1.sdk
+IPHONE_SIMULATOR_SDK_PATH=$(xcrun -sdk iphonesimulator --show-sdk-path)
+
+# IPHONE_SIMULATOR_SDK_PATH 目录中 SDKs 的上级目录
+# /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer
+IPHONE_SIMULATOR_CROSS_TOP=${IPHONE_SIMULATOR_SDK_PATH//\/SDKs*/}
+
+# IPHONE_SIMULATOR_SDK_PATH 目录中最后一级目录
+# iPhoneSimulator10.1.sdk
+IPHONE_SIMULATOR_CROSS_SDK=${IPHONE_SIMULATOR_SDK_PATH##*/}
+
+
 # for continuous integration
 # https://travis-ci.org/mtigas/iOS-OnionBrowser
 if [ "$1" == "--noverify" ]; then
@@ -110,16 +139,9 @@ fi
 tar zxf openssl-${VERSION}.tar.gz -C $SRCDIR
 cd "${SRCDIR}/openssl-${VERSION}"
 
-set +e # don't bail out of bash script if ccache doesn't exist
-CCACHE=`which ccache`
-if [ $? == "0" ]; then
-    echo "Building with ccache: $CCACHE"
-    CCACHE="${CCACHE} "
-else
-    echo "Building without ccache"
-    CCACHE=""
-fi
-set -e # back to regular "bail out on error" mode
+
+
+
 
 export ORIGINALPATH=$PATH
 
@@ -135,7 +157,7 @@ do
     mkdir -p "${INTERDIR}/${PLATFORM}${SDKVERSION}-${ARCH}.sdk"
 
     export PATH="${DEVELOPER}/Toolchains/XcodeDefault.xctoolchain/usr/bin/:${DEVELOPER}/Platforms/${PLATFORM}.platform/Developer/usr/bin/:${DEVELOPER}/Toolchains/XcodeDefault.xctoolchain/usr/bin:${DEVELOPER}/usr/bin:${ORIGINALPATH}"
-    export CC="${CCACHE}`which gcc` -arch ${ARCH} -miphoneos-version-min=${MINIOSVERSION}"
+    export CC="${CLANG} -arch ${ARCH} -miphoneos-version-min=${MINIOSVERSION}"
 
     if [ "${ARCH}" == "x86_64" ] || [ "${ARCH}" == "arm64" ]; then
         ./configure BSD-generic64 no-asm enable-ec_nistp_64_gcc_128 \
